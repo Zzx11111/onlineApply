@@ -1,8 +1,8 @@
 /***
  * @name 工具函数
  */
-//const jwt = require('jsonwebtoken');// 生成token入口
-//const config = require('../config/config')
+const jwt = require('jsonwebtoken');// 生成token入口
+const config = require('../config/config')
 const findMembers = function (instance, {
   prefix,
   specifiedType,
@@ -40,27 +40,18 @@ const findMembers = function (instance, {
   return _find(instance)
 }
 // 颁发token令牌： uid：用户id号，scope：用户权限
-// const generateToken = function (uid, scope) {
-//   const secretKey = global.config.security.secretKey; // 令牌的key
-//   const expiresIn = global.config.security.expiresIn; // 令牌的有效时间
-//   const token = jwt.sign({
-//     uid,
-//     scope
-//   }, secretKey, {
-//     expiresIn
-//   })
-//   return token
-// }
-
-const generateToken = function (uid,scope){
-  const secretKey = config.security.secretKey
-  const expiresIn = config.security.expiresIn
-  const token = jwt.sign({uid,scope},secretKey,{expiresIn})
+const generateToken = function(uid,scope){
+  const token = jwt.sign({
+    uid,
+    scope
+  },config.security.secretKey,{
+    expiresIn:config.security.expiresIn
+  })
   return token
 }
 
 module.exports = {
   findMembers,
-  generateToken,
+  generateToken
 }
 

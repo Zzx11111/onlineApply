@@ -28,8 +28,18 @@ class AuthFailed extends HttpException{
   }
 }
 
+class Forbidden extends HttpException{
+  constructor(msg = '禁止访问',errorCode = 10002){
+    super()
+    this.msg = msg
+    this.errorCode = errorCode
+    this.code = 403
+  }
+}
+
 module.exports = {
   HttpException,
   ParameterException,
-  AuthFailed
+  AuthFailed,
+  Forbidden
 }

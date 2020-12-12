@@ -3,6 +3,11 @@ module.exports = {
   enviroment:'prod',
   wx:{
     appid:'wxb2bd9a2c08b417bf',
-    secret:'d725f10afcfa3b6455d955b7cd58caa1',
+    secret:'7e1b1867bc3aa0540216655c0fc544e6',
+  },
+  //生成令牌参数
+  security:{
+    secretKey:'abcdefg',
+    expiresIn:60*60*60
   }
 }
