@@ -1,13 +1,69 @@
-const {MysqlOperate} = require('../../core/mysql-operate')
+const { MysqlOperate } = require('../../core/mysql-operate')
+const { db } = require('../../core/db');
+const { Sequelize, Model } = require('sequelize');
+const fs = require('fs')
+const { ParameterException } = require('../../core/http-exception');
+// class Activity{
+//   static async getActivity(){
+//     let activity = await MysqlOperate.query('select * from activity')
+//     console.log(activity[0].createTime.getHours())
+//     console.log(activity[0].createTime)
+//     return activity
+//   }
+//   static async addActivity(){
 
-class Activity{
-  static async getActivity(){
-    let activity = await MysqlOperate.query('select * from activity')
-    console.log(activity[0].createTime.getHours())
-    console.log(activity[0].createTime)
-    return activity
+//   }
+// }
+
+class Activity extends Model {
+  static async addActivity(activity) {
+    let imgBase = activity.image.replace(/^data:image\/\w+;base64,/, "");
+    //当前时间
+    let date = new Date()
+    let year = date.getFullYear()
+    let month = date.getMonth() + 1
+    let day = date.getDate()
+    let hour = date.getHours()
+    let minute = date.getMinutes()
+    let second = date.getSeconds()
+    let dateTime = `${year}${month}${day}${hour}${minute}${second}`
+    let createTime = `${year}-${month}-${day} ${hour}:${minute}:${second}`
+    console.log(createTime)
+    //图片转换存在static下
+    let dataBuffer = Buffer.from(imgBase, 'base64');
+    let name = process.cwd() + '\/static\/' + activity.uid + dateTime + '.jpg';
+    try {
+      fs.writeFileSync(name,dataBuffer)
+    } catch (e) {
+      throw new ParameterException('图片上传失败')
+    }
+    activity.image = activity.uid + dateTime +'.jpg'
+    activity.createTime = createTime
+    console.log(activity)
+    const row = await Activity.create(activity)
+    return row
   }
 }
+
+Activity.init({
+  id: {
+    type: Sequelize.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+  },
+  activityName: Sequelize.STRING,
+  createTime: Sequelize.DATE,
+  activityAddress: Sequelize.STRING,
+  activityTime: Sequelize.DATE,
+  image: Sequelize.STRING,
+  latitude: Sequelize.STRING,
+  longitude: Sequelize.STRING,
+  activityContent: Sequelize.STRING,
+  phone: Sequelize.STRING,
+  uid: Sequelize.INTEGER
+}, { sequelize: db, tableName: 'activity', updatedAt: false, createdAt: false })
+
+
 
 module.exports = {
   Activity

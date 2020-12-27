@@ -18,7 +18,6 @@ class ParameterException extends HttpException {
     this.code = 400
   }
 }
-
 class AuthFailed extends HttpException{
   constructor(msg = '验证失败',errorCode = 10001){
     super()
@@ -36,10 +35,20 @@ class Forbidden extends HttpException{
     this.code = 403
   }
 }
+//图片上传失败
+// class imgError extends HttpException{
+//   constructor(msg = '图片上传失败',errorCode = 10003){
+//     super()
+//     this.msg = msg
+//     this.errorCode = errorCode
+//     this.code = 400
+//   }
+// }
 
 module.exports = {
   HttpException,
   ParameterException,
   AuthFailed,
-  Forbidden
+  Forbidden,
+  
 }
