@@ -21,7 +21,9 @@ router.post('/addActivity',async (ctx,next) => {
     throw new ParameterException()
   }
   ctx.body = {
-    msg:添加成功
+    msg:'成功',
+    status:201,
+    errorCode:0
   }
 })
 

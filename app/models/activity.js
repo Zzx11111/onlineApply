@@ -26,8 +26,12 @@ class Activity extends Model {
     let hour = date.getHours()
     let minute = date.getMinutes()
     let second = date.getSeconds()
-    let dateTime = `${year}${month}${day}${hour}${minute}${second}`
-    let createTime = `${year}-${month}-${day} ${hour}:${minute}:${second}`
+    const formatNumber = n => {
+      n = n.toString()
+      return n[1] ? n : '0' + n
+    }
+    let dateTime = `${year}${month}${day}${formatNumber(hour)}${formatNumber(minute)}${formatNumber(second)}`
+    let createTime = `${year}-${month}-${day} ${formatNumber(hour)}:${formatNumber(minute)}:${formatNumber(second)}`
     console.log(createTime)
     //图片转换存在static下
     let dataBuffer = Buffer.from(imgBase, 'base64');
