@@ -3,6 +3,7 @@ const { db } = require('../../core/db');
 const { Sequelize, Model } = require('sequelize');
 const fs = require('fs')
 const { ParameterException } = require('../../core/http-exception');
+
 // class Activity{
 //   static async getActivity(){
 //     let activity = await MysqlOperate.query('select * from activity')
