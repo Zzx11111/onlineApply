@@ -8,9 +8,8 @@ class Examine{
   }
   get m(){
     return async(ctx,next) => {
-      console.log("dddddddddddddddd");
       const activity = ctx.request.body
-      console.log(activity.image)
+      
       const {data} = await axios({
         method:"post",
         url:"https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=0cKg1Ln1gTvMVSbNhZeTbhMY&client_secret=25tAKOO1DwsEoNaM3Tsg7euPDG7ZD6V0"

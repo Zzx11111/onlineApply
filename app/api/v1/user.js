@@ -10,10 +10,13 @@ const router = new Router({
 })
 
 router.post('/login',async(ctx,next) => {
-  console.log(ctx.header)
+  // console.log(ctx.header)
   const v = await new LoginValidator().validate(ctx)
-  console.log(v.get('body.code'))
-  const user = await User.wxLogin(v.get('body.code'))
+  const user = await User.wxLogin({
+    code:v.get('body.code'),
+    username:v.get('body.username'),
+    avatarUrl:v.get('body.avatarUrl')
+  })
   const token = await generateToken(user.id)
   
   ctx.body = {
@@ -22,20 +25,8 @@ router.post('/login',async(ctx,next) => {
   }
 })
 
-router.get('/c',async (ctx) => {
-  const res = await axios({
-    url:'http://10.101.88.52:8080/api/web/holdCurrency/query',
-    method:'get',
-    headers:{
-      'Authorization':"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxNCJ9.Xxo61kZDlkCG7o0s7ww7O19nIWTwEdXAUweuRrYnE6Y",
-      'Content-Type': 'application/json;charset=UTF-8',
-    }
-  })
-  console.log(res)
-  ctx.body = {
-    a:res.data
-  }
-})
+
+
 router.get('/info',new Auth().m,async(ctx,next) => {
   ctx.body = {
     id:ctx.auth.id

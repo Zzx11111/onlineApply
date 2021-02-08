@@ -5,6 +5,12 @@ class LoginValidator extends LinValidator{
     super()
     this.code = [
       new Rule('isLength','code不能为空',{min:1})
+    ],
+    this.avatarUrl = [
+      new Rule('isLength','avatarUrl不能为空',{min:1})
+    ],
+    this.username = [
+      new Rule('isLength','username不能为空',{min:1})
     ]
   }
 }
