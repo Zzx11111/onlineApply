@@ -1,6 +1,8 @@
 const Router = require('koa-router')
 const { map } = require('lodash')
-const {Activity} = require('../../models/activity')
+const Activity = require('../../models/activity')
+const User = require('../../models/user')
+const Enlist = require('../../models/enlist')
 const {AddActivityValidator} = require('../../validators/validator')
 const {ParameterException} = require('../../../core/http-exception');
 const {Examine} = require('../../../middleware/examine');
@@ -9,9 +11,31 @@ const router = new Router({
 })
 
 router.get('/getActivity',async (ctx,next) => {
-  console.log('a')
-  //await Activity.getActivity()
-  ctx.body = await Activity.getActivity()
+  const query = {}
+  query.offset = ctx.request.query.offset
+  query.limit = ctx.request.query.limit
+  console.log(query);
+  const activity = await Activity.getActivity(query)
+  // let a = activity.map(async (item) => {
+  //   //发起人的用户名和头像
+  //   const promoter = await User.getUserInfo(item.uid)
+  //   console.log(promoter)
+  //   item.promoter = promoter 
+  //   const applyNum = await Enlist.applyNum(item.id)
+  //   item.applyNum = applyNum
+  //   return item
+  // })
+  for(let i = 0;i<activity.length;i++){
+    const promoter = await User.getUserInfo(activity[i].uid)
+    //console.log(promoter)
+    //发起人的用户名和头像
+    activity[i].dataValues.promoter = promoter 
+    const applyNum = await Enlist.applyNum(activity[i].id)
+    activity[i].dataValues.applyNum = applyNum
+    console.log(activity[i])
+  }
+  
+  ctx.body = activity
 })
 
 

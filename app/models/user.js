@@ -39,6 +39,14 @@ class User extends Model{
     })
     return user
   }
+  static async getUserInfo(uid){
+    const user = await User.findOne({uid})
+    return {
+      uid:user.id,
+      username:user.username,
+      avatarUrl:user.avatarUrl
+    }
+  }
 }
 
 

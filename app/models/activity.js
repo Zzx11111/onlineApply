@@ -1,4 +1,4 @@
-const { MysqlOperate } = require('../../core/mysql-operate')
+
 const { db } = require('../../core/db');
 const { Sequelize, Model } = require('sequelize');
 const fs = require('fs')
@@ -17,6 +17,10 @@ const { ParameterException } = require('../../core/http-exception');
 // }
 
 class Activity extends Model {
+  /**
+   * 添加活动
+   * @param {*} activity 活动内容
+   */
   static async addActivity(activity) {
     let imgBase = activity.image.replace(/^data:image\/\w+;base64,/, "");
     //当前时间
@@ -48,6 +52,14 @@ class Activity extends Model {
     const row = await Activity.create(activity)
     return row
   }
+  /**
+   * 
+   */
+  static async getActivity({offset = 0,limit = 10}){
+    const activity = await Activity.findAll({offset,limit})
+    //console.log(activity)
+    return activity
+  }
 }
 
 Activity.init({
@@ -70,6 +82,4 @@ Activity.init({
 
 
 
-module.exports = {
-  Activity
-}
+module.exports = Activity
