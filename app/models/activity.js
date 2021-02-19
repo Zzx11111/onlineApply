@@ -1,8 +1,9 @@
 
 const { db } = require('../../core/db');
-const { Sequelize, Model } = require('sequelize');
+const { Sequelize, Model,Op } = require('sequelize');
 const fs = require('fs')
 const { ParameterException } = require('../../core/http-exception');
+const { sequelize } = require('./user');
 
 // class Activity{
 //   static async getActivity(){
@@ -56,8 +57,14 @@ class Activity extends Model {
    * 
    */
   static async getActivity({offset = 0,limit = 10}){
-    const activity = await Activity.findAll({offset,limit})
-    //console.log(activity)
+    let nowDate = new Date().toLocaleString();
+    const activity = await Activity.findAll({offset,limit,
+      where:{
+        activityTime:{
+          [Op.gt]: nowDate
+        }
+    }})
+    console.log(activity)
     return activity
   }
 }

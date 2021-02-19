@@ -32,7 +32,7 @@ router.get('/getActivity',async (ctx,next) => {
     activity[i].dataValues.promoter = promoter 
     const applyNum = await Enlist.applyNum(activity[i].id)
     activity[i].dataValues.applyNum = applyNum
-    console.log(activity[i])
+    //console.log(activity[i])
   }
   
   ctx.body = activity
@@ -41,6 +41,7 @@ router.get('/getActivity',async (ctx,next) => {
 
 router.post('/addActivity',new Examine().m,async (ctx,next) => {
   const v = await new AddActivityValidator().validate(ctx)
+  console.log(v)
   const activity = await Activity.addActivity(ctx.request.body)
   if(!activity){
     throw new ParameterException()
