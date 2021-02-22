@@ -3,7 +3,7 @@ const { db } = require('../../core/db');
 const { Sequelize, Model,Op } = require('sequelize');
 const fs = require('fs')
 const { ParameterException } = require('../../core/http-exception');
-const { sequelize } = require('./user');
+// const { sequelize } = require('./user');
 
 // class Activity{
 //   static async getActivity(){
@@ -54,7 +54,7 @@ class Activity extends Model {
     return row
   }
   /**
-   * 
+   * 获取活动列表
    */
   static async getActivity({offset = 0,limit = 10}){
     let nowDate = new Date().toLocaleString();
@@ -67,7 +67,50 @@ class Activity extends Model {
     console.log(activity)
     return activity
   }
+  static async allActivity(ids){
+    let nowDate = new Date().toLocaleString();
+    const activity = await Activity.findAll({
+      where:{
+        activityTime:{
+          [Op.gt]: nowDate
+        }
+    }})
+    //console.log(activity)
+    return activity
+  }
+  /**
+   * 搜索活动
+   * @param {搜索关键字} keyword 
+   */
+  static async searchActivity(keyWord){
+    let nowDate = new Date().toLocaleString();
+    const activity = await Activity.findAll({
+      where:{
+        activityName:{
+          [Op.substring]:keyWord
+        }
+      },
+      order:[
+        ['activityTime','DESC']
+      ]
+    })
+    return activity
+  }
+  /**
+   * 获取活动详情
+   * @param {活动id} id 
+   */
+  static async activityInfo(id){
+    const activity = await Activity.findOne({
+      where:{
+        id:id
+      }
+    })
+    console.log(activity);
+    return activity
+  }
 }
+
 
 Activity.init({
   id: {

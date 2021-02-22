@@ -14,13 +14,24 @@ class LoginValidator extends LinValidator{
     ]
   }
 }
-//获取活动校验
-class getActivityValidator extends LinValidator{
+//搜索活动校验
+class searchActivityValidator extends LinValidator{
   constructor(){
     super()
-    
+    this.keyWord = [
+      new Rule('isLength','关键字不能为空',{min:1})
+    ]
   }
 }
+class activityInfoValidator extends LinValidator{
+  constructor(){
+    super()
+    this.id = [
+      new Rule('isLength','活动id不能为空',{min:1})
+    ]
+  }
+}
+
 //发布活动校验
 class AddActivityValidator extends LinValidator{
   constructor(){
@@ -58,6 +69,7 @@ class AddActivityValidator extends LinValidator{
 
 module.exports = {
   LoginValidator,
-  getActivityValidator,
-  AddActivityValidator
+  AddActivityValidator,
+  searchActivityValidator,
+  activityInfoValidator
 }
