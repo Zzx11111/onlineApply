@@ -66,10 +66,26 @@ class AddActivityValidator extends LinValidator{
   }
   
 }
+//活动报名校验
+class activityEnlistValidator extends LinValidator{
+  constructor(){
+    super()
+    this.aid = [
+      new Rule('isLength','aid不能为空',{min:1})
+    ]
+    this.name = [
+      new Rule('isLength','姓名不能为空',{min:1})
+    ]
+    this.phone = [
+      new Rule('isLength','联系电话不能为空',{min:1})
+    ]
+  }
+}
 
 module.exports = {
   LoginValidator,
   AddActivityValidator,
   searchActivityValidator,
-  activityInfoValidator
+  activityInfoValidator,
+  activityEnlistValidator
 }

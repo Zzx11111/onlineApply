@@ -32,9 +32,10 @@ router.get('/getActivity',async (ctx,next) => {
 /**
  * 添加活动
  */
-router.post('/addActivity',new Examine().m,async (ctx,next) => {
+//new Examine().m
+router.post('/addActivity',async (ctx,next) => {
   const v = await new AddActivityValidator().validate(ctx)
-  console.log(v)
+  console.log(v.get("body.activityContent"));
   const activity = await Activity.addActivity(ctx.request.body)
   if(!activity){
     throw new ParameterException()
@@ -88,11 +89,14 @@ router.post('/activityInfo',async (ctx,next) => {
   const v = await new activityInfoValidator().validate(ctx)
   const id = v.get("body.id")
   const activity = await Activity.activityInfo(id)
+  const promoter = await User.getUserInfo(activity.dataValues.uid)
+  activity.dataValues.promoter = promoter
   const uids = await Enlist.enlistPeopleList(id)
   activity.dataValues.enlistList = []
   for(let item of uids){
-    const promoter = await User.getUserInfo(item.dataValues.uid)
-    activity.dataValues.enlistList.push(promoter)
+    //报名人
+    const Applicant = await User.getUserInfo(item.dataValues.uid)
+    activity.dataValues.enlistList.push(Applicant)
   }
   ctx.body = activity
 })

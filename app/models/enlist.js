@@ -44,6 +44,22 @@ class Enlist extends Model{
     })
     return uids
   }
+  /**
+   * 
+   * @param {用户id} uid 
+   * @param {活动id} aid 
+   * @param {报名人名称} name
+   * @param {报名人电话} phone 
+   */
+  static async activityEnlist(uid,aid,name,phone){
+    const row = await Enlist.create({
+      uid:uid,
+      aid:aid,
+      name:name,
+      phone:phone
+    })
+    return row
+  }
 }
 
 Enlist.init({
@@ -53,7 +69,9 @@ Enlist.init({
     autoIncrement: true
   },
   uid:Sequelize.INTEGER,
-  aid:Sequelize.INTEGER
+  aid:Sequelize.INTEGER,
+  name:Sequelize.STRING,
+  phone:Sequelize.STRING
 }, { sequelize: db, tableName: 'enlist', updatedAt: false, createdAt: false })
 
 module.exports = Enlist

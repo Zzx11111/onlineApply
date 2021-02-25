@@ -64,7 +64,6 @@ class Activity extends Model {
           [Op.gt]: nowDate
         }
     }})
-    console.log(activity)
     return activity
   }
   static async allActivity(ids){
