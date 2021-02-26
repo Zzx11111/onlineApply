@@ -1,6 +1,6 @@
 const Router = require('koa-router')
 const {HttpException} = require('../../../core/http-exception')
-const {LoginValidator} = require('../../validators/validator')
+const {LoginValidator,updateInfoValidator} = require('../../validators/validator')
 const User = require('../../models/user')
 const {Auth} = require('../../../middleware/auth')
 const {generateToken} = require('../../../core/utils')
@@ -25,6 +25,24 @@ router.post('/login',async(ctx,next) => {
   }
 })
 
+router.post('/updateInfo',new Auth().m,async (ctx,next)=> {
+  const v = await new updateInfoValidator().validate(ctx)
+  const id = ctx.auth.id
+  const user = await User.updateInfo({
+    id:id,
+    name:v.get("body.name"),
+    phone:v.get("body.phone")
+  })
+  //console.log(user);
+  if(user){
+    ctx.body = {
+      msg:"修改成功",
+      errorCode:0,
+      code:200
+    }
+  }
+  
+})
 
 
 router.get('/info',new Auth().m,async(ctx,next) => {

@@ -81,11 +81,32 @@ class activityEnlistValidator extends LinValidator{
     ]
   }
 }
+class subscribeMessageValidator extends LinValidator{
+  constructor(){
+    super()
+    this.aid = [
+      new Rule('isLength','aid不能为空',{min:1})
+    ]
+  }
+}
+class updateInfoValidator extends LinValidator{
+  constructor(){
+    super()
+    this.name = [
+      new Rule('isLength','姓名不能为空',{min:1})
+    ]
+    this.phone = [
+      new Rule('isLength','联系电话不能为空',{min:1})
+    ]
+  }
+}
 
 module.exports = {
   LoginValidator,
   AddActivityValidator,
   searchActivityValidator,
   activityInfoValidator,
-  activityEnlistValidator
+  activityEnlistValidator,
+  subscribeMessageValidator,
+  updateInfoValidator
 }

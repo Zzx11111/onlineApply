@@ -38,7 +38,7 @@ class Activity extends Model {
     }
     let dateTime = `${year}${month}${day}${formatNumber(hour)}${formatNumber(minute)}${formatNumber(second)}`
     let createTime = `${year}-${month}-${day} ${formatNumber(hour)}:${formatNumber(minute)}:${formatNumber(second)}`
-    console.log(createTime)
+    // console.log(createTime)
     //图片转换存在static下
     let dataBuffer = Buffer.from(imgBase, 'base64');
     let name = process.cwd() + '\/static\/' + activity.uid + dateTime + '.jpg';

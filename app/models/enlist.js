@@ -1,7 +1,7 @@
 const { db } = require('../../core/db');
 const { Sequelize, Model } = require('sequelize');
 const { sequelize } = require('./user');
-
+const {ParameterException} = require("../../core/http-exception")
 
 
 class Enlist extends Model{
@@ -52,13 +52,23 @@ class Enlist extends Model{
    * @param {报名人电话} phone 
    */
   static async activityEnlist(uid,aid,name,phone){
-    const row = await Enlist.create({
+    const row = await Enlist.count({
+      where:{
+        uid:uid,
+        aid:aid
+      }
+    })
+    console.log(row)
+    if(row > 0){
+      throw new ParameterException('已经报名了')
+    }
+    const enlist = await Enlist.create({
       uid:uid,
       aid:aid,
       name:name,
       phone:phone
     })
-    return row
+    return enlist
   }
 }
 

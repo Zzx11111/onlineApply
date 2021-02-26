@@ -1,5 +1,4 @@
 const Router = require('koa-router')
-const { map } = require('lodash')
 const Activity = require('../../models/activity')
 const User = require('../../models/user')
 const Enlist = require('../../models/enlist')

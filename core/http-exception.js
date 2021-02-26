@@ -11,7 +11,7 @@ class HttpException extends Error{
 }
 
 class ParameterException extends HttpException {
-  constructor(msg = '参数错误', errorCode = 10000) {
+  constructor(msg = '参数错误', errorCode = 10003) {
     super()
     this.msg = msg
     this.errorCode = errorCode
@@ -35,6 +35,7 @@ class Forbidden extends HttpException{
     this.code = 403
   }
 }
+
 //图片上传失败
 // class imgError extends HttpException{
 //   constructor(msg = '图片上传失败',errorCode = 10003){

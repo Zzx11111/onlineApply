@@ -47,6 +47,27 @@ class User extends Model{
       avatarUrl:user.avatarUrl
     }
   }
+  static async getOpenId(uid){
+    const user = await User.findOne({
+      where:{
+        id:uid
+      }
+    })
+    return {
+      openId:user.openId
+    }
+  }/**
+   * 修改用户信息
+   * @param {*} param0 
+   */
+  static async updateInfo({id,name,phone}){
+    const user = await User.update({name:name,phone:phone},{
+      where:{
+        id:id
+      }
+    })
+    return user
+  }
 }
 
 
@@ -60,6 +81,8 @@ User.init({
   openId:Sequelize.STRING,
   username:Sequelize.STRING,
   avatarUrl:Sequelize.STRING,
-  isRelease:Sequelize.INTEGER
+  isRelease:Sequelize.INTEGER,
+  name:Sequelize.STRING,
+  phone:Sequelize.STRING
 }, { sequelize: db, tableName: 'user', updatedAt: false, createdAt: false })
 module.exports = User
