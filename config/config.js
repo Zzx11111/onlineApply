@@ -8,6 +8,6 @@ module.exports = {
   //生成令牌参数
   security:{
     secretKey:'abcdefg',
-    expiresIn:60*60*60
+    expiresIn:60*60*10000
   }
 }

@@ -3,6 +3,7 @@ const { db } = require('../../core/db');
 const { Sequelize, Model,Op } = require('sequelize');
 const fs = require('fs')
 const { ParameterException } = require('../../core/http-exception');
+const {GetDistance} = require('../../core/utils')
 // const { sequelize } = require('./user');
 
 // class Activity{
@@ -58,12 +59,16 @@ class Activity extends Model {
    */
   static async getActivity({offset = 0,limit = 10}){
     let nowDate = new Date().toLocaleString();
-    const activity = await Activity.findAll({offset,limit,
+    const offset1 = Number(offset)
+    //console.log(offset1)
+    const limit1 = Number(limit)
+    const activity = await Activity.findAll({offset:offset1,limit:limit1,
       where:{
         activityTime:{
           [Op.gt]: nowDate
         }
-    }})
+      }
+    })
     return activity
   }
   static async allActivity(ids){
@@ -107,6 +112,33 @@ class Activity extends Model {
     })
     console.log(activity);
     return activity
+  }
+  /**
+   * 获取附近的活动
+   * 
+   */
+  static async nearlyActivity(latitude,longitude){
+    let nowDate = new Date().toLocaleString();
+    const activitys = await Activity.findAll({
+      where:{
+        activityTime:{
+          [Op.gt]: nowDate
+        }
+      }
+    })
+    for (let i = 0;i<activitys.length;i++) {
+      let distance = GetDistance(latitude,longitude,activitys[i].latitude,activitys[i].longitude)     
+      //console.log(distance)
+      activitys[i].dataValues.distance = distance
+    }
+    function compare(property){
+      return function(a,b){
+          var value1 = a.dataValues[property];
+          var value2 = b.dataValues[property];
+          return value1 - value2;
+      }
+    }
+    return activitys.sort(compare('distance'))
   }
 }
 

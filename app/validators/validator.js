@@ -100,6 +100,17 @@ class updateInfoValidator extends LinValidator{
     ]
   }
 }
+class nearlyActivityValidator extends LinValidator{
+  constructor(){
+    super()
+    this.latitude = [
+      new Rule('isLength','latitude不能为空',{min:1})
+    ]
+    this.longitude = [
+      new Rule('isLength','longitude不能为空',{min:1})
+    ]
+  }
+}
 
 module.exports = {
   LoginValidator,
@@ -108,5 +119,6 @@ module.exports = {
   activityInfoValidator,
   activityEnlistValidator,
   subscribeMessageValidator,
-  updateInfoValidator
+  updateInfoValidator,
+  nearlyActivityValidator
 }

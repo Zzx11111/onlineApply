@@ -2,7 +2,7 @@ const Router = require('koa-router')
 const Activity = require('../../models/activity')
 const User = require('../../models/user')
 const Enlist = require('../../models/enlist')
-const {AddActivityValidator,searchActivityValidator,activityInfoValidator} = require('../../validators/validator')
+const {AddActivityValidator,searchActivityValidator,activityInfoValidator,nearlyActivityValidator} = require('../../validators/validator')
 const {ParameterException} = require('../../../core/http-exception');
 const {Examine} = require('../../../middleware/examine');
 const router = new Router({
@@ -96,6 +96,23 @@ router.post('/activityInfo',async (ctx,next) => {
     //报名人
     const Applicant = await User.getUserInfo(item.dataValues.uid)
     activity.dataValues.enlistList.push(Applicant)
+  }
+  ctx.body = activity
+})
+/**
+ * 获取附近的活动
+ */
+router.post('/nearlyActivity',async (ctx,next) => {
+  //console.log("ddddddd")
+  const v = await new nearlyActivityValidator().validate(ctx)
+  //console.log(v.get("body.latitude"))
+  const activity = await Activity.nearlyActivity(v.get('body.latitude'),v.get('body.longitude'))
+  for(let i = 0;i<activity.length;i++){
+    const promoter = await User.getUserInfo(activity[i].uid)
+    //发起人的用户名和头像
+    activity[i].dataValues.promoter = promoter 
+    const applyNum = await Enlist.applyNum(activity[i].id)
+    activity[i].dataValues.applyNum = applyNum
   }
   ctx.body = activity
 })
