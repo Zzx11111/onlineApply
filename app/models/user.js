@@ -39,12 +39,18 @@ class User extends Model{
     })
     return user
   }
+  /**
+   * 
+   * @param {用户id} uid 
+   */
   static async getUserInfo(uid){
     const user = await User.findOne({uid})
     return {
       uid:user.id,
       username:user.username,
-      avatarUrl:user.avatarUrl
+      avatarUrl:user.avatarUrl,
+      name:user.name,
+      phone:user.phone
     }
   }
   static async getOpenId(uid){

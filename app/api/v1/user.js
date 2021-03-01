@@ -2,6 +2,8 @@ const Router = require('koa-router')
 const {HttpException} = require('../../../core/http-exception')
 const {LoginValidator,updateInfoValidator} = require('../../validators/validator')
 const User = require('../../models/user')
+const Activity = require('../../models/activity')
+const Enlist = require('../../models/enlist')
 const {Auth} = require('../../../middleware/auth')
 const {generateToken} = require('../../../core/utils')
 const axios = require('axios')
@@ -41,13 +43,44 @@ router.post('/updateInfo',new Auth().m,async (ctx,next)=> {
       code:200
     }
   }
-  
 })
-
-
+//参加的活动
+router.get('/myRelease',new Auth().m,async(ctx,next) => {
+  const id = ctx.auth.id
+  const activity = await Activity.getMyRelease(id)
+  for(let i = 0;i<activity.length;i++){
+    const promoter = await User.getUserInfo(activity[i].uid)
+    //发起人的用户名和头像
+    activity[i].dataValues.promoter = promoter 
+    const applyNum = await Enlist.applyNum(activity[i].id)
+    activity[i].dataValues.applyNum = applyNum
+  }
+  ctx.body = activity
+})
+//报名过的活动
+router.get('/myEnlist',new Auth().m,async(ctx,next) => {
+  const id = ctx.auth.id
+  const aids = await Enlist.getUserEnlistActivity(id)
+  console.log(aids)
+  const activity = await Activity.activityInfo(aids)
+  for(let i = 0;i<activity.length;i++){
+    const promoter = await User.getUserInfo(activity[i].uid)
+    //发起人的用户名和头像
+    activity[i].dataValues.promoter = promoter 
+    const applyNum = await Enlist.applyNum(activity[i].id)
+    activity[i].dataValues.applyNum = applyNum
+  }
+  console.log(activity);
+  ctx.body = activity
+})
+//个人信息
 router.get('/info',new Auth().m,async(ctx,next) => {
+  const id = ctx.auth.id
+  const userInfo = await User.getUserInfo(id)
   ctx.body = {
-    id:ctx.auth.id
+    id:userInfo.uid,
+    name:userInfo.name,
+    phone:userInfo.phone
   }
 })
 

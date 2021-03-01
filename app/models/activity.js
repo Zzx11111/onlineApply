@@ -105,7 +105,8 @@ class Activity extends Model {
    * @param {活动id} id 
    */
   static async activityInfo(id){
-    const activity = await Activity.findOne({
+    console.log(id)
+    const activity = await Activity.findAll({
       where:{
         id:id
       }
@@ -139,6 +140,18 @@ class Activity extends Model {
       }
     }
     return activitys.sort(compare('distance'))
+  }
+  /**
+   * 获取用户参加的活动
+   * @param {用户id} uid 
+   */
+  static async getMyRelease(uid){
+    const activity = await Activity.findAll({
+      where:{
+        uid:uid
+      }
+    })
+    return activity
   }
 }
 

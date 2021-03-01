@@ -1,7 +1,8 @@
 const { db } = require('../../core/db');
 const { Sequelize, Model } = require('sequelize');
 const { sequelize } = require('./user');
-const {ParameterException} = require("../../core/http-exception")
+const {ParameterException} = require("../../core/http-exception");
+const { findAll } = require('./activity');
 
 
 class Enlist extends Model{
@@ -69,6 +70,24 @@ class Enlist extends Model{
       phone:phone
     })
     return enlist
+  }
+  /**
+   * 获取用户报名的活动id
+   */
+  static async getUserEnlistActivity(uid){
+    const enlist = await Enlist.findAll({
+      attributes:['aid'],
+      where:{
+        uid:uid
+      }
+    })
+    const aids = []
+    console.log()
+    for (const item of enlist) {
+      aids.push(item.aid)
+    }
+    console.log(aids)
+    return aids
   }
 }
 
