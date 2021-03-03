@@ -5,6 +5,7 @@ const Enlist = require('../../models/enlist')
 const {AddActivityValidator,searchActivityValidator,activityInfoValidator,nearlyActivityValidator} = require('../../validators/validator')
 const {ParameterException} = require('../../../core/http-exception');
 const {Examine} = require('../../../middleware/examine');
+const { Auth } = require('../../../middleware/auth')
 const router = new Router({
   prefix:'/v1/activity'
 })
@@ -32,10 +33,13 @@ router.get('/getActivity',async (ctx,next) => {
  * 添加活动
  */
 //new Examine().m
-router.post('/addActivity',async (ctx,next) => {
+router.post('/addActivity',new Auth().m,new Examine().m,async (ctx,next) => {
+  const uid = ctx.auth.id
   const v = await new AddActivityValidator().validate(ctx)
-  console.log(v.get("body.activityContent"));
-  const activity = await Activity.addActivity(ctx.request.body)
+  const activityObj = ctx.request.body
+  activityObj.uid = uid
+  const activity = await Activity.addActivity(activityObj)
+  
   if(!activity){
     throw new ParameterException()
   }
@@ -49,7 +53,6 @@ router.post('/addActivity',async (ctx,next) => {
  * 获取热门活动
  */
 router.get('/hotActivity',async (ctx,next) => {
-  console.log("aaa");
   const activity = await Activity.allActivity();
   let activityIds = []
   console.log(activity[0].id)
@@ -73,7 +76,9 @@ router.post('/searchActivity',async (ctx,next) => {
   const v = await await new searchActivityValidator().validate(ctx)
   const activity = await Activity.searchActivity(v.get('body.keyWord'))
   for(let i = 0;i<activity.length;i++){
+    console.log(activity[i].uid);
     const promoter = await User.getUserInfo(activity[i].uid)
+    console.log(promoter)
     //发起人的用户名和头像
     activity[i].dataValues.promoter = promoter 
     const applyNum = await Enlist.applyNum(activity[i].id)
@@ -88,16 +93,16 @@ router.post('/activityInfo',async (ctx,next) => {
   const v = await new activityInfoValidator().validate(ctx)
   const id = v.get("body.id")
   const activity = await Activity.activityInfo(id)
-  const promoter = await User.getUserInfo(activity.dataValues.uid)
-  activity.dataValues.promoter = promoter
+  const promoter = await User.getUserInfo(activity[0].dataValues.uid)
+  activity[0].dataValues.promoter = promoter
   const uids = await Enlist.enlistPeopleList(id)
-  activity.dataValues.enlistList = []
+  activity[0].dataValues.enlistList = []
   for(let item of uids){
     //报名人
     const Applicant = await User.getUserInfo(item.dataValues.uid)
-    activity.dataValues.enlistList.push(Applicant)
+    activity[0].dataValues.enlistList.push(Applicant)
   }
-  ctx.body = activity
+  ctx.body = activity[0]
 })
 /**
  * 获取附近的活动

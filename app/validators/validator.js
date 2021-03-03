@@ -111,6 +111,25 @@ class nearlyActivityValidator extends LinValidator{
     ]
   }
 }
+class addCommentValidator extends LinValidator{
+  constructor(){
+    super()
+    this.aid = [
+      new Rule('isLength','活动id不能为空',{min:1})
+    ]
+    this.comment = [
+      new Rule('isLength','评论内容不能为空',{min:1})
+    ]
+  }
+}
+class GetCommentValidator extends LinValidator{
+  constructor(){
+    super()
+    this.aid = [
+      new Rule('isLength','活动id不能为空',{min:1})
+    ]
+  }
+}
 
 module.exports = {
   LoginValidator,
@@ -120,5 +139,7 @@ module.exports = {
   activityEnlistValidator,
   subscribeMessageValidator,
   updateInfoValidator,
-  nearlyActivityValidator
+  nearlyActivityValidator,
+  addCommentValidator,
+  GetCommentValidator
 }

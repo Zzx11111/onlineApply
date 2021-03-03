@@ -44,7 +44,11 @@ class User extends Model{
    * @param {用户id} uid 
    */
   static async getUserInfo(uid){
-    const user = await User.findOne({uid})
+    const user = await User.findOne({
+      where:{
+        uid:uid
+      }
+    })
     return {
       uid:user.id,
       username:user.username,
