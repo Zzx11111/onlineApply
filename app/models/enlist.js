@@ -8,7 +8,7 @@ const { findAll } = require('./activity');
 class Enlist extends Model{
   /**
    * 获取报名的人数
-   * @param {活动id} aid 
+   * @param {*} aid 活动id
    */
   static async applyNum(aid){
     const count = await Enlist.count({
@@ -34,7 +34,7 @@ class Enlist extends Model{
   }
   /**
    * 报名名单
-   * @param {活动ID} aid 
+   * @param {*} aid 活动ID
    */
   static async enlistPeopleList(aid){
     console.log(aid)
@@ -47,10 +47,10 @@ class Enlist extends Model{
   }
   /**
    * 
-   * @param {用户id} uid 
-   * @param {活动id} aid 
-   * @param {报名人名称} name
-   * @param {报名人电话} phone 
+   * @param {*} uid 用户id
+   * @param {*} aid 活动id
+   * @param {*} name报名人名称
+   * @param {*} phone 报名人电话
    */
   static async activityEnlist(uid,aid,name,phone){
     const row = await Enlist.count({
@@ -88,6 +88,18 @@ class Enlist extends Model{
     }
     console.log(aids)
     return aids
+  }
+  /**
+   * 获取报名信息
+   */
+  static async getEnlistInfo(aid,uid){
+    const enlistInfo = await Enlist.findOne({
+      where:{
+        aid:aid,
+        uid:uid
+      }
+    })
+    return enlistInfo
   }
 }
 

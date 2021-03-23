@@ -49,7 +49,6 @@ router.get('/myRelease',new Auth().m,async(ctx,next) => {
   const id = ctx.auth.id
   console.log(id);
   const activity = await Activity.getMyRelease(id)
-  console.log(activity.length)
   for(let i = 0;i<activity.length;i++){
     const promoter = await User.getUserInfo(activity[i].uid)
     //发起人的用户名和头像

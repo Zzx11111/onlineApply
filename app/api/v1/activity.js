@@ -16,7 +16,7 @@ router.get('/getActivity',async (ctx,next) => {
   const query = {}
   query.offset = ctx.request.query.offset
   query.limit = ctx.request.query.limit
-  console.log(query);
+  //console.log(query);
   const activity = await Activity.getActivity(query)
   for(let i = 0;i<activity.length;i++){
     const promoter = await User.getUserInfo(activity[i].uid)
@@ -25,7 +25,7 @@ router.get('/getActivity',async (ctx,next) => {
     const applyNum = await Enlist.applyNum(activity[i].id)
     activity[i].dataValues.applyNum = applyNum
   }
-  
+  console.log(activity)
   ctx.body = activity
 })
 
@@ -38,6 +38,7 @@ router.post('/addActivity',new Auth().m,new Examine().m,async (ctx,next) => {
   const v = await new AddActivityValidator().validate(ctx)
   const activityObj = ctx.request.body
   activityObj.uid = uid
+  console.log(activityObj)
   const activity = await Activity.addActivity(activityObj)
   
   if(!activity){
@@ -64,8 +65,7 @@ router.get('/hotActivity',async (ctx,next) => {
   //   return item.id
   // })
   console.log(activityIds);
-   const ids = await Enlist.hotActivity(activityIds);
-  // console.log(ids);
+  const ids = await Enlist.hotActivity(activityIds);
 
   ctx.body = ids
 })
@@ -100,6 +100,9 @@ router.post('/activityInfo',async (ctx,next) => {
   for(let item of uids){
     //报名人
     const Applicant = await User.getUserInfo(item.dataValues.uid)
+    const enlistInfo = await Enlist.getEnlistInfo(id,item.dataValues.uid)
+    Applicant.name = enlistInfo.name
+    Applicant.phone = enlistInfo.phone
     activity[0].dataValues.enlistList.push(Applicant)
   }
   ctx.body = activity[0]

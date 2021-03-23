@@ -130,6 +130,17 @@ class GetCommentValidator extends LinValidator{
     ]
   }
 }
+class AdminLoginValidator extends LinValidator{
+  constructor(){
+    super()
+    this.account = [
+      new Rule('isLength','账号不能为空',{min:1})
+    ]
+    this.password = [
+      new Rule('isLength','密码不能为空',{min:1})
+    ]
+  }
+}
 
 module.exports = {
   LoginValidator,
@@ -141,5 +152,6 @@ module.exports = {
   updateInfoValidator,
   nearlyActivityValidator,
   addCommentValidator,
-  GetCommentValidator
+  GetCommentValidator,
+  AdminLoginValidator
 }

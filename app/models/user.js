@@ -41,12 +41,12 @@ class User extends Model{
   }
   /**
    * 
-   * @param {用户id} uid 
+   * @param {*} uid 用户id
    */
   static async getUserInfo(uid){
     const user = await User.findOne({
       where:{
-        uid:uid
+        id:uid
       }
     })
     return {
@@ -68,7 +68,7 @@ class User extends Model{
     }
   }/**
    * 修改用户信息
-   * @param {*} param0 
+   * @param {*} param
    */
   static async updateInfo({id,name,phone}){
     const user = await User.update({name:name,phone:phone},{
@@ -91,7 +91,6 @@ User.init({
   openId:Sequelize.STRING,
   username:Sequelize.STRING,
   avatarUrl:Sequelize.STRING,
-  isRelease:Sequelize.INTEGER,
   name:Sequelize.STRING,
   phone:Sequelize.STRING
 }, { sequelize: db, tableName: 'user', updatedAt: false, createdAt: false })

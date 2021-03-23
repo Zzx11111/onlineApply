@@ -52,6 +52,7 @@ class Activity extends Model {
     activity.createTime = createTime
     console.log(activity)
     const row = await Activity.create(activity)
+    console.log('dsadsadsadddddddddd')
     return row
   }
   /**
@@ -84,7 +85,7 @@ class Activity extends Model {
   }
   /**
    * 搜索活动
-   * @param {搜索关键字} keyword 
+   * @param {*} keyword 搜索关键字
    */
   static async searchActivity(keyWord){
     let nowDate = new Date().toLocaleString();
@@ -102,7 +103,7 @@ class Activity extends Model {
   }
   /**
    * 获取活动详情
-   * @param {活动id} id 
+   * @param {*} id 活动id
    */
   static async activityInfo(id){
     console.log(id)
@@ -143,7 +144,7 @@ class Activity extends Model {
   }
   /**
    * 获取用户参加的活动
-   * @param {用户id} uid 
+   * @param {*} uid 用户id
    */
   static async getMyRelease(uid){
     const activity = await Activity.findAll({
