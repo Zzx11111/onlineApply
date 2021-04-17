@@ -39,7 +39,6 @@ class Activity extends Model {
     }
     let dateTime = `${year}${month}${day}${formatNumber(hour)}${formatNumber(minute)}${formatNumber(second)}`
     let createTime = `${year}-${month}-${day} ${formatNumber(hour)}:${formatNumber(minute)}:${formatNumber(second)}`
-    // console.log(createTime)
     //图片转换存在static下
     let dataBuffer = Buffer.from(imgBase, 'base64');
     let name = process.cwd() + '\/static\/' + activity.uid + dateTime + '.jpg';
@@ -50,9 +49,7 @@ class Activity extends Model {
     }
     activity.image = activity.uid + dateTime +'.jpg'
     activity.createTime = createTime
-    console.log(activity)
     const row = await Activity.create(activity)
-    console.log('dsadsadsadddddddddd')
     return row
   }
   /**
@@ -61,7 +58,6 @@ class Activity extends Model {
   static async getActivity({offset = 0,limit = 10}){
     let nowDate = new Date().toLocaleString();
     const offset1 = Number(offset)
-    //console.log(offset1)
     const limit1 = Number(limit)
     const activity = await Activity.findAll({offset:offset1,limit:limit1,
       where:{
@@ -80,7 +76,6 @@ class Activity extends Model {
           [Op.gt]: nowDate
         }
     }})
-    //console.log(activity)
     return activity
   }
   /**
@@ -106,13 +101,11 @@ class Activity extends Model {
    * @param {*} id 活动id
    */
   static async activityInfo(id){
-    console.log(id)
     const activity = await Activity.findAll({
       where:{
         id:id
       }
     })
-    console.log(activity);
     return activity
   }
   /**

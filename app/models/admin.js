@@ -2,7 +2,7 @@ const { Sequelize, Model, CITEXT } = require('sequelize');
 const axios = require('axios')
 const { db } = require('../../core/db');
 const {ParameterException} = require('../../core/http-exception')
-const {generateToken} = require('../../core/utils')
+const {generateToken} = require('../../core/utils');
 class Admin extends Model{
   /**
    * 管理员登录
@@ -48,6 +48,10 @@ class Admin extends Model{
     })
     return adminList
   }
+  /**
+   * 修改管理员
+   * @param {*} data 
+   */
   static async editAdmin(data){
     const adminList = await Admin.update({
       roleID:data.roleID
@@ -57,6 +61,44 @@ class Admin extends Model{
         id:data.id
       }
     })
+    return adminList
+  }
+  /**
+   * 删除管理员
+   * @param {*} id 
+   */
+  static async deleteAdmin(id){
+    console.log(id)
+    const admin = await Admin.destroy({
+      where:{id}
+    })
+    if(admin !== 0){
+      return true
+    }
+  }
+  /**
+   * 添加管理员
+   * @param {*} data 
+   */
+  static async addAdmin({account,password,roleID}){
+    const row = await Admin.count({
+      where:{account}
+    })
+    if(row>0){
+      throw new ParameterException('账号已存在')
+    }
+    const role = Number(roleID)
+    console.log(roleID)
+    const admin = await Admin.create({
+      account,
+      password,
+      roleID:role
+    })
+    if(admin.id !== null){
+      return true
+    }else{
+      return false
+    }
   }
 }
 

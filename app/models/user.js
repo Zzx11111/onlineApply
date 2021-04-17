@@ -2,7 +2,7 @@ const { Sequelize, Model } = require('sequelize');
 const axios = require('axios')
 const { db } = require('../../core/db');
 const {wx} = require('../../config/config')
-const {AuthFailed} = require('../../core/http-exception')
+const {AuthFailed,ParameterException} = require('../../core/http-exception')
 class User extends Model{
   //用户登录、第一次登录的创建用户
   static async wxLogin({code,username,avatarUrl}){
@@ -77,6 +77,24 @@ class User extends Model{
       }
     })
     return user
+  }
+  /**
+   * 查询所有用户
+   */
+  static async getUserList(){
+    const userList = await User.findAll({
+      attributes: ['id', 'username','name','phone','openId']
+    })
+    return userList
+  }
+  static async deleteUser(id){
+    const data = await User.destroy({
+      where:{id}
+    })
+    if(data === 0){
+      throw new ParameterException('删除失败')
+    }
+    return true
   }
 }
 

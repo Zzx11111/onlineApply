@@ -1,6 +1,6 @@
 const Router = require('koa-router')
 const {HttpException} = require('../../../core/http-exception')
-const {LoginValidator,updateInfoValidator} = require('../../validators/validator')
+const {LoginValidator,updateInfoValidator,deleteUserValidator} = require('../../validators/validator')
 const User = require('../../models/user')
 const Activity = require('../../models/activity')
 const Enlist = require('../../models/enlist')
@@ -82,6 +82,24 @@ router.get('/info',new Auth().m,async(ctx,next) => {
     id:userInfo.uid,
     name:userInfo.name,
     phone:userInfo.phone
+  }
+})
+
+router.get('/getUserList',new Auth().m,async(ctx,next) => {
+  const userList = await User.getUserList()
+  ctx.body = userList
+})
+
+router.post('/deleteUser',new Auth().m,async (ctx,next) => {
+  const v = await new deleteUserValidator().validate(ctx)
+  const id = v.get('body.id')
+  const data = await User.deleteUser(id)
+  console.log(data);
+  if(data === true){
+    ctx.body = {
+      msg:'删除成功',
+      errorCode:0
+    }
   }
 })
 

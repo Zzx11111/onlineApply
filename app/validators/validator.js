@@ -142,6 +142,59 @@ class AdminLoginValidator extends LinValidator{
   }
 }
 
+
+class EditAdminValidator extends LinValidator{
+  constructor(){
+    super()
+    this.id = [
+      new Rule('isLength','ID不能为空',{min:1})
+    ]
+    this.roleID = [
+      new Rule('isLength','角色ID不能为空',{min:1})
+    ]
+  }
+}
+class AddAdminValidator extends LinValidator{
+  constructor(){
+    super()
+    
+    this.roleID = [
+      new Rule('isLength','角色ID不能为空',{min:1})
+    ]
+    this.account = [
+      new Rule('isLength','账号不能为空',{min:1})
+    ]
+    this.password = [
+      new Rule('isLength','密码不能为空',{min:1})
+    ]
+  }
+}
+class deleteAdminValidator extends LinValidator{
+  constructor(){
+    super()
+    this.id = [
+      new Rule('isLength','ID不能为空',{min:1})
+    ]
+  }
+}
+class deleteUserValidator extends LinValidator{
+  constructor(){
+    super()
+    this.id = [
+      new Rule('isLength','ID不能为空',{min:1})
+    ]
+  }
+}
+
+class deleteCommentValidator extends LinValidator{
+  constructor(){
+    super()
+    this.id = [
+      new Rule('isLength','ID不能为空',{min:1})
+    ]
+  }
+}
+
 module.exports = {
   LoginValidator,
   AddActivityValidator,
@@ -153,5 +206,10 @@ module.exports = {
   nearlyActivityValidator,
   addCommentValidator,
   GetCommentValidator,
-  AdminLoginValidator
+  AdminLoginValidator,
+  EditAdminValidator,
+  AddAdminValidator,
+  deleteAdminValidator,
+  deleteUserValidator,
+  deleteCommentValidator
 }

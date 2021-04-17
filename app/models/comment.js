@@ -1,8 +1,8 @@
-const { Sequelize, Model } = require('sequelize');
+const { Sequelize, Model, where } = require('sequelize');
 const axios = require('axios')
 const { db } = require('../../core/db');
 const {wx} = require('../../config/config')
-const {AuthFailed} = require('../../core/http-exception')
+const {AuthFailed, ParameterException} = require('../../core/http-exception')
 
 class Comment extends Model{
   //添加评论
@@ -25,6 +25,15 @@ class Comment extends Model{
       }
     })
     return Comments
+  }
+  static async deleteComment(id){
+    const row = await Comment.destroy({
+      where:{id}
+    })
+    if(row == 0){
+      new ParameterException('删除失败')
+    }
+    return true
   }
 }
 

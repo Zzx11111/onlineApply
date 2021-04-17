@@ -6,7 +6,7 @@ const Admin = require('../../models/admin')
 const Menu = require('../../models/menu')
 const Role = require('../../models/role')
 const Role_menu =require('../../models/role_menu')
-const {AdminLoginValidator} = require('../../validators/validator')
+const {AdminLoginValidator,EditAdminValidator,AddAdminValidator,deleteAdminValidator} = require('../../validators/validator')
 const {ParameterException} = require('../../../core/http-exception');
 const { Auth } = require('../../../middleware/auth')
 const router = new Router({
@@ -54,8 +54,47 @@ router.get('/getRole',new Auth().m,async (ctx,next) => {
 })
 
 
-router.post('/editAadmin',async (ctx,next) => {
-  
+router.post('/editAdmin',new Auth().m,async (ctx,next) => {
+  const v = await new EditAdminValidator().validate(ctx)
+  const id = v.get("body.id")
+  const roleID = v.get("body.roleID")
+  const admin = await Admin.editAdmin({id,roleID})
+  if(admin[0] === 0){
+    throw new ParameterException('更新失败')
+  }
+  ctx.body = {
+    msg:'更新成功',
+    errorCode:0
+  }
+})
+
+router.post('/addAdmin',new Auth().m,async (ctx,next) => {
+  const v = await new AddAdminValidator().validate(ctx)
+  const account = v.get('body.account')
+  const password = v.get('body.password')
+  const roleID = v.get('body.roleID')
+  const admin = await Admin.addAdmin({account,password,roleID})
+  if(admin !== true){
+    throw new ParameterException('添加失败')
+  }
+  ctx.body = {
+    msg:"添加成功",
+    errorCode:0
+  }
+})
+
+router.post('/deleteAdmin',new Auth().m,async (ctx,next) => {
+  const v = await new deleteAdminValidator().validate(ctx)
+  const id = v.get('body.id')
+  console.log(id)
+  const data = await Admin.deleteAdmin(id)
+  if(data !== true){
+    throw new ParameterException('更新失败')
+  }
+  ctx.body = {
+    msg:"删除成功",
+    errorCode:0
+  }
 })
 
 

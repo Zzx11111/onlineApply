@@ -1,6 +1,6 @@
 const Router = require('koa-router')
 const {HttpException} = require('../../../core/http-exception')
-const {addCommentValidator,GetCommentValidator} = require('../../validators/validator')
+const {addCommentValidator,GetCommentValidator,deleteCommentValidator} = require('../../validators/validator')
 const User = require('../../models/user')
 const Comment = require('../../models/comment')
 const {Auth} = require('../../../middleware/auth')
@@ -34,6 +34,21 @@ router.get('/getComment',async (ctx,next) => {
     comments[i].dataValues.promoter = promoter 
   }
   ctx.body = comments
+})
+/**
+ * 删除评论
+ */
+router.post('/deleteComment',new Auth().m,async (ctx,next) => {
+  const v = await new deleteCommentValidator().validate(ctx)
+  const id = v.get('body.id')
+  const res = await Comment.deleteComment(id)
+  if(res == true){
+    ctx.body = {
+      msg:'删除成功',
+      errorCode:0,
+      code:200
+    }
+  }
 })
 
 
