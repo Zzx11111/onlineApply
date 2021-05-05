@@ -194,6 +194,25 @@ class deleteCommentValidator extends LinValidator{
     ]
   }
 }
+class deleteActivityValidator extends LinValidator{
+  constructor(){
+    super()
+    this.id = [
+      new Rule('isLength','ID不能为空',{min:1})
+    ]
+  }
+}
+class editPasswordValidator extends LinValidator{
+  constructor(){
+    super()
+    this.oldPassword = [
+      new Rule('isLength','原密码不能为空',{min:1})
+    ]
+    this.newPassword = [
+      new Rule('isLength','新密码不能为空',{min:1})
+    ]
+  }
+}
 
 module.exports = {
   LoginValidator,
@@ -211,5 +230,7 @@ module.exports = {
   AddAdminValidator,
   deleteAdminValidator,
   deleteUserValidator,
-  deleteCommentValidator
+  deleteCommentValidator,
+  deleteActivityValidator,
+  editPasswordValidator
 }

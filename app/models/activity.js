@@ -66,6 +66,7 @@ class Activity extends Model {
         }
       }
     })
+    console.log(activity);
     return activity
   }
   static async allActivity(ids){
@@ -147,6 +148,17 @@ class Activity extends Model {
     })
     return activity
   }
+  static async deleteActivity(id){
+    const row = await Activity.destroy({
+      where:{id}
+    })
+    if(row === 0){
+      throw new ParameterException('删除失败')
+    }
+    return true
+  }
+
+
 }
 
 

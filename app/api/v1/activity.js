@@ -2,7 +2,7 @@ const Router = require('koa-router')
 const Activity = require('../../models/activity')
 const User = require('../../models/user')
 const Enlist = require('../../models/enlist')
-const {AddActivityValidator,searchActivityValidator,activityInfoValidator,nearlyActivityValidator} = require('../../validators/validator')
+const {AddActivityValidator,searchActivityValidator,activityInfoValidator,nearlyActivityValidator,deleteActivityValidator} = require('../../validators/validator')
 const {ParameterException} = require('../../../core/http-exception');
 const {Examine} = require('../../../middleware/examine');
 const { Auth } = require('../../../middleware/auth')
@@ -125,6 +125,19 @@ router.post('/nearlyActivity',async (ctx,next) => {
     activity[i].dataValues.applyNum = applyNum
   }
   ctx.body = activity
+})
+
+
+router.post('/deleteActivity',new Auth().m,async (ctx,next) => {
+  const v = await new deleteActivityValidator().validate(ctx)
+  const row = await Activity.deleteActivity(v.get('body.id'))
+  if(row){
+    ctx.body = {
+      msg:'成功',
+      status:200,
+      errorCode:0
+    }
+  }
 })
 
 module.exports = router

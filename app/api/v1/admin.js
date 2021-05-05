@@ -6,7 +6,7 @@ const Admin = require('../../models/admin')
 const Menu = require('../../models/menu')
 const Role = require('../../models/role')
 const Role_menu =require('../../models/role_menu')
-const {AdminLoginValidator,EditAdminValidator,AddAdminValidator,deleteAdminValidator} = require('../../validators/validator')
+const {AdminLoginValidator,EditAdminValidator,AddAdminValidator,deleteAdminValidator,editPasswordValidator} = require('../../validators/validator')
 const {ParameterException} = require('../../../core/http-exception');
 const { Auth } = require('../../../middleware/auth')
 const router = new Router({
@@ -94,6 +94,21 @@ router.post('/deleteAdmin',new Auth().m,async (ctx,next) => {
   ctx.body = {
     msg:"删除成功",
     errorCode:0
+  }
+})
+
+router.post('/editPassword',new Auth().m,async (ctx,next) => {
+  console.log('sssssssssss');
+  const v = await new editPasswordValidator().validate(ctx)
+  const id = ctx.auth.id;
+  const oldPassword = v.get('body.oldPassword')
+  const newPassword = v.get('body.newPassword')
+  const data = await Admin.editPassword({id,oldPassword,newPassword})
+  if(data == true){
+    ctx.body = {
+      msg:"修改密码成功",
+      errorCode:0
+    }
   }
 })
 

@@ -100,6 +100,27 @@ class Admin extends Model{
       return false
     }
   }
+
+
+  static async editPassword({id,oldPassword,newPassword}){
+    const row = await Admin.count({
+      where:{
+        id,
+        password:oldPassword
+      }
+    })
+    console.log(row);
+    if(row < 1){
+      throw new ParameterException('原密码错误')
+    }
+    const admin = await Admin.update({password:newPassword},{
+      where:{
+        id,
+        password:oldPassword
+      }
+    })
+    return true
+  }
 }
 
 
