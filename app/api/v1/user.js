@@ -12,7 +12,6 @@ const router = new Router({
 })
 
 router.post('/login',async(ctx,next) => {
-  // console.log(ctx.header)
   const v = await new LoginValidator().validate(ctx)
   const user = await User.wxLogin({
     code:v.get('body.code'),
@@ -20,7 +19,6 @@ router.post('/login',async(ctx,next) => {
     avatarUrl:v.get('body.avatarUrl')
   })
   const token = await generateToken(user.id)
-  
   ctx.body = {
     id:user.id,
     token:token

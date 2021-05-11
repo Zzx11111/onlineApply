@@ -49,6 +49,7 @@ class Examine{
       if(textRes.data.conclusionType === 1 && imageRes.data.conclusionType === 1){
         await next()
       }else{
+        console.log('ddd');
         throw new ParameterException("发布活动内容不合法")
       }
       // console.log(textRes.data.conclusionType);

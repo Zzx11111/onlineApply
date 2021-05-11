@@ -123,8 +123,7 @@ class Activity extends Model {
       }
     })
     for (let i = 0;i<activitys.length;i++) {
-      let distance = GetDistance(latitude,longitude,activitys[i].latitude,activitys[i].longitude)     
-      //console.log(distance)
+      let distance = GetDistance(latitude,longitude,activitys[i].latitude,activitys[i].longitude)
       activitys[i].dataValues.distance = distance
     }
     function compare(property){

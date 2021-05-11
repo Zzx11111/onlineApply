@@ -31,25 +31,16 @@ router.post('/activityEnlist',new Auth().m,async (ctx,next)=>{
  * 订阅信息
  */
 router.post('/subscribeMessage',new Auth().m,async(ctx,async) => {
-  console.log('---------------------------');
   const v = await new subscribeMessageValidator().validate(ctx)
   const uid = ctx.auth.id
   const activity = await Activity.activityInfo(v.get('body.aid'))
-  console.log('0');
   const nowTime = Date.parse(new Date())
-  console.log(nowTime +'1~')
-  console.log(activity);
-  console.log(activity[0].dataValues.activityTime +"2~");
   const activityTime = Date.parse(activity[0].dataValues.activityTime)
-  console.log(activityTime +'3~');
   const differ = activityTime - nowTime
   //订阅信息
-  console.log(differ +'ddddddddddd');
   if(differ < 86400000){
-    console.log('CCCCCCCCCCCCCCCCCCC');
     const {openId} = await User.getOpenId(uid)
     const {data} = await axios.get(`https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${wx.appid}&secret=${wx.secret}`)
-    //console.log(data.access_token);
     const res = await axios({
       url:`https://api.weixin.qq.com/cgi-bin/message/subscribe/send?access_token=${data.access_token}`,
       method:"POST",
@@ -72,7 +63,6 @@ router.post('/subscribeMessage',new Auth().m,async(ctx,async) => {
         }
       }
     })
-    console.log(res.data);
     if(res.data.errorCode == 0){
       ctx.body = {
         msg:"发送成功",
@@ -83,14 +73,11 @@ router.post('/subscribeMessage',new Auth().m,async(ctx,async) => {
   }else{
     let time = setInterval(async() => {
       const nowTime = Date.parse(Date())
-      // console.log(nowTime)
       const activityTime = Date.parse(activity[0].activityTime)
-      //console.log(activityTime);
       const differ = activityTime - nowTime
       if(differ < 86400000){
         const {openId} = await User.getOpenId(uid)
         const {data} = await axios.get(`https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${wx.appid}&secret=${wx.secret}`)
-        console.log(data.access_token);
         const res = await axios({
           url:`https://api.weixin.qq.com/cgi-bin/message/subscribe/send?access_token=${data.access_token}`,
           method:"POST",
